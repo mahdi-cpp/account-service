@@ -3,13 +3,13 @@ package depricated
 import (
 	"log"
 
-	"github.com/mahdi-cpp/account-service/account"
+	"github.com/mahdi-cpp/account-service/internal/user"
 	"github.com/mahdi-cpp/api-go-pkg/network"
 )
 
 type NetworkManager struct {
-	networkUser     *network.Control[account.User]
-	networkUserList *network.Control[[]account.User]
+	networkUser     *network.Control[user.User]
+	networkUserList *network.Control[[]user.User]
 }
 
 type requestBody struct {
@@ -18,14 +18,14 @@ type requestBody struct {
 
 func NewNetworkAccountManager() *NetworkManager {
 	manager := &NetworkManager{
-		networkUser:     network.NewNetworkManager[account.User]("http://localhost:8080/api/v1/user/get_user"),
-		networkUserList: network.NewNetworkManager[[]account.User]("http://localhost:8080/api/v1/user/list"),
+		networkUser:     network.NewNetworkManager[user.User]("http://localhost:8080/api/v1/user/get_user"),
+		networkUserList: network.NewNetworkManager[[]user.User]("http://localhost:8080/api/v1/user/list"),
 	}
 
 	return manager
 }
 
-func (m *NetworkManager) GetUser(id string) (*account.User, error) {
+func (m *NetworkManager) GetUser(id string) (*user.User, error) {
 
 	user, err := m.networkUser.Read("", requestBody{UserID: id})
 	if err != nil {
@@ -35,7 +35,7 @@ func (m *NetworkManager) GetUser(id string) (*account.User, error) {
 	return user, nil
 }
 
-func (m *NetworkManager) GetAll() (*[]account.User, error) {
+func (m *NetworkManager) GetAll() (*[]user.User, error) {
 
 	users, err := m.networkUserList.Read("", nil)
 	if err != nil {
@@ -45,7 +45,7 @@ func (m *NetworkManager) GetAll() (*[]account.User, error) {
 	return users, nil
 }
 
-func (m *NetworkManager) GetByFilterOptions(userIDs []string) (*[]account.User, error) {
+func (m *NetworkManager) GetByFilterOptions(userIDs []string) (*[]user.User, error) {
 
 	users, err := m.networkUserList.Read("", nil)
 	if err != nil {

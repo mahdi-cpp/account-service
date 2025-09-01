@@ -7,7 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mahdi-cpp/account-service/utils"
+	"github.com/mahdi-cpp/account-service/internal/config"
+	"github.com/mahdi-cpp/account-service/internal/user"
+	"github.com/mahdi-cpp/account-service/internal/utils"
 	"github.com/mahdi-cpp/api-go-pkg/collection_manager_uuid7"
 	"github.com/redis/go-redis/v9"
 )
@@ -23,9 +25,9 @@ const (
 	subscriptionTimeout = 3 * time.Second
 )
 
-type ServiceManager struct {
+type Manager struct {
 	mu             sync.RWMutex
-	UserCollection *collection_manager_uuid7.Manager[*User]
+	UserCollection *collection_manager_uuid7.Manager[*user.User]
 	rdb            *redis.Client
 	ctx            context.Context
 	cancel         context.CancelFunc
@@ -33,10 +35,10 @@ type ServiceManager struct {
 	subReady       chan struct{}
 }
 
-func NewAccountManager() (*ServiceManager, error) {
+func NewAccountManager() (*Manager, error) {
 
 	ctx, cancel := context.WithCancel(context.Background())
-	manager := &ServiceManager{
+	manager := &Manager{
 		ctx:      ctx,
 		cancel:   cancel,
 		subReady: make(chan struct{}),
@@ -57,8 +59,8 @@ func NewAccountManager() (*ServiceManager, error) {
 
 	// Initialize user collection
 	var err error
-	manager.UserCollection, err = collection_manager_uuid7.NewCollectionManager[*User](
-		GetServicesPath("account/users/"), true,
+	manager.UserCollection, err = collection_manager_uuid7.NewCollectionManager[*user.User](
+		config.GetServicesPath("account/users/"), true,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to initialize user collection: %w", err)
@@ -81,7 +83,7 @@ func NewAccountManager() (*ServiceManager, error) {
 	return manager, nil
 }
 
-func (m *ServiceManager) Close() error {
+func (m *Manager) Close() error {
 	m.cancel()  // Signal shutdown
 	m.wg.Wait() // Wait for goroutines
 
@@ -91,7 +93,7 @@ func (m *ServiceManager) Close() error {
 	return nil
 }
 
-func (m *ServiceManager) runSubscription() {
+func (m *Manager) runSubscription() {
 	defer m.wg.Done()
 
 	channels := []string{
@@ -129,7 +131,7 @@ func (m *ServiceManager) runSubscription() {
 	}
 }
 
-func (m *ServiceManager) handleMessage(msg *redis.Message) {
+func (m *Manager) handleMessage(msg *redis.Message) {
 	switch msg.Channel {
 	case commandChannel:
 		switch msg.Payload {
@@ -149,7 +151,7 @@ func (m *ServiceManager) handleMessage(msg *redis.Message) {
 	}
 }
 
-func (m *ServiceManager) Publish() error {
+func (m *Manager) Publish() error {
 	users, err := m.UserCollection.GetAll()
 	if err != nil {
 		return fmt.Errorf("get users failed: %w", err)
@@ -170,11 +172,11 @@ func (m *ServiceManager) Publish() error {
 	return nil
 }
 
-func (m *ServiceManager) Create(newUser *User) (*User, error) {
+func (m *Manager) Create(newUser *user.User) (*user.User, error) {
 	return nil, nil
 }
 
-func (m *ServiceManager) Update(update Update) (*User, error) {
+func (m *Manager) Update(update user.Update) (*user.User, error) {
 
 	user, err := m.UserCollection.Get(update.ID)
 	if err != nil {

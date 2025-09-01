@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mahdi-cpp/account-service/account"
-	"github.com/mahdi-cpp/account-service/depricated"
+	"github.com/mahdi-cpp/account-service/internal/depricated"
+	"github.com/mahdi-cpp/account-service/internal/user"
 	"github.com/mahdi-cpp/api-go-pkg/collection_manager_uuid7"
 	"github.com/mahdi-cpp/api-go-pkg/metadata"
 	"github.com/mahdi-cpp/api-go-pkg/network"
@@ -37,13 +37,13 @@ func testAccountUserList() {
 }
 
 func testCollection2() {
-	users, err := collection_manager_uuid7.NewCollectionManager[*account.User]("albums_test.json", false)
+	users, err := collection_manager_uuid7.NewCollectionManager[*user.User]("albums_test.json", false)
 	if err != nil {
 		fmt.Println("UserStorage:", err)
 		return
 	}
 
-	item := &account.User{FirstName: "Original"}
+	item := &user.User{FirstName: "Original"}
 	create, err := users.Create(item)
 	if err != nil {
 		return
@@ -66,7 +66,7 @@ func testInfoPlist() {
 
 func testNetwork() {
 
-	userControl := network.NewNetworkManager[[]account.User]("http://localhost:8080/api/v1/user/")
+	userControl := network.NewNetworkManager[[]user.User]("http://localhost:8080/api/v1/user/")
 
 	// Make request (nil body if not needed)
 	users, err := userControl.Read("list", nil)

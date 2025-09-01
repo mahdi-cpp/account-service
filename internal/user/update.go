@@ -1,4 +1,4 @@
-package account
+package user
 
 import "github.com/mahdi-cpp/api-go-pkg/update"
 

@@ -1,8 +1,9 @@
-package account
+package user
 
 import (
-	"github.com/mahdi-cpp/api-go-pkg/search"
 	"strings"
+
+	"github.com/mahdi-cpp/api-go-pkg/search"
 )
 
 var PHAssetLessFuncs = map[string]search.LessFunction[*User]{

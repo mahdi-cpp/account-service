@@ -8,14 +8,15 @@ import (
 	"sync"
 	"time"
 
+	"github.com/mahdi-cpp/account-service/internal/user"
 	"github.com/redis/go-redis/v9"
 )
 
 type ClientManager struct {
 	mu        sync.RWMutex
 	rdb       *redis.Client
-	Users     []*User
-	UsersMap  map[string]*User
+	Users     []*user.User
+	UsersMap  map[string]*user.User
 	callback  func(msg *redis.Message)
 	ctx       context.Context
 	cancel    context.CancelFunc
@@ -31,7 +32,7 @@ func NewClientManager() (*ClientManager, error) {
 			Addr: "localhost:6389",
 			DB:   0,
 		}),
-		UsersMap: make(map[string]*User),
+		UsersMap: make(map[string]*user.User),
 		ctx:      ctx,
 		cancel:   cancel,
 		subReady: make(chan struct{}),
@@ -48,7 +49,7 @@ func NewClientManager() (*ClientManager, error) {
 	return manager, nil
 }
 
-func (m *ClientManager) GetUsersMap() map[string]*User {
+func (m *ClientManager) GetUsersMap() map[string]*user.User {
 	return m.UsersMap
 }
 
@@ -156,7 +157,7 @@ func (m *ClientManager) handleMessage(msg *redis.Message) {
 }
 
 func (m *ClientManager) fetchUsers(msg *redis.Message) {
-	var users []*User
+	var users []*user.User
 	if err := json.Unmarshal([]byte(msg.Payload), &users); err != nil {
 		log.Printf("JSON unmarshal error: %v", err)
 		return

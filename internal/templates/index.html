@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en" class="scroll-smooth">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Interactive Account Service API Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A single-page layout with a sticky top navigation for quick jumps to API endpoint sections (Create, Read, Update, Delete, Auth). Each section presents scenarios as interactive, collapsible cards. This task-oriented design is intuitive for developers, prevents information overload by hiding details until requested, and makes the API specification easily explorable and digestible compared to a static table. -->
+    <!-- Visualization & Content Choices: Report Info: API Scenarios (Request, Success, Failure) -> Goal: Organize & Inform -> Viz/Presentation Method: Interactive collapsible cards and simple flow diagrams built with styled HTML/CSS divs. -> Interaction: Click to expand/collapse scenario details; click nav links to scroll to sections. -> Justification: Transforms a static, dense table into a dynamic and focused user experience. The card-based interaction encourages exploration without overwhelming the user. Flow diagrams provide a quick visual summary of outcomes. -> Library/Method: Vanilla JS for interactivity, Tailwind CSS for layout and styling. CONFIRMING NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        .scenario-content {
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .scenario-content.open {
+            max-height: 1000px;
+        }
+        .code-block {
+            background-color: #f7fafc;
+            border: 1px solid #edf2f7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            position: relative;
+        }
+        .http-method {
+            font-weight: 700;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+        .http-post { background-color: #e6fffa; color: #2c7a7b; }
+        .http-get { background-color: #ebf8ff; color: #2b6cb0; }
+        .http-put { background-color: #fffaf0; color: #c05621; }
+        .http-delete { background-color: #fff5f5; color: #c53030; }
+        .nav-link.active {
+            color: #4A5568;
+            border-bottom: 2px solid #4A5568;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+    <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <h1 class="text-xl font-bold text-gray-700">Account Service API</h1>
+            <div class="hidden sm:block">
+                <div class="flex items-center space-x-4">
+                    <a href="#create" class="nav-link text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Create</a>
+                    <a href="#read" class="nav-link text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Read</a>
+                    <a href="#update" class="nav-link text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Update</a>
+                    <a href="#delete" class="nav-link text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Delete</a>
+                    <a href="#auth" class="nav-link text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Auth</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+        This is an interactive guide to the Golang Account Service REST API. It outlines the primary operations, requests, and expected responses. Click on any scenario to expand its details.
+    </p>
+
+    <div class="space-y-16">
+
+        <section id="create">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Create a New Account</h2>
+            <p class="text-gray-600 mb-8">This section details how to create new user accounts. It covers the successful creation flow and potential errors like submitting data for an account that already exists.</p>
+            <div class="flex items-center space-x-4 mb-8 p-4 bg-gray-100 rounded-lg">
+                <span class="http-method http-post">POST</span>
+                <span class="text-gray-700 font-mono text-lg">/api/v1/accounts</span>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Successful Creation</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request Body</h4>
+                                <div class="code-block">{<br>&nbsp;&nbsp;"email": "user@example.com",<br>&nbsp;&nbsp;"password": "securepassword123"<br>}</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-green-700">Success Response (201 Created)</h4>
+                                <div class="code-block border-green-200 bg-green-50">
+                                    <strong>Headers:</strong><br>Location: /api/v1/accounts/{id}<br><br><strong>Body:</strong><br>{<br>&nbsp;&nbsp;"id": "generated-uuid-1234"<br>}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Duplicate Email</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request Body</h4>
+                                <div class="code-block">{<br>&nbsp;&nbsp;"email": "existing@example.com",<br>&nbsp;&nbsp;"password": "anotherpassword"<br>}</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-orange-700">Error Response (409 Conflict)</h4>
+                                <div class="code-block border-orange-200 bg-orange-50">{<br>&nbsp;&nbsp;"error": "Email address already in use."<br>}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="read">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Retrieve an Existing Account</h2>
+            <p class="text-gray-600 mb-8">This endpoint allows for fetching the details of a single account using its unique ID. Note that sensitive information like the password is not returned.</p>
+            <div class="flex items-center space-x-4 mb-8 p-4 bg-gray-100 rounded-lg">
+                <span class="http-method http-get">GET</span>
+                <span class="text-gray-700 font-mono text-lg">/api/v1/accounts/{id}</span>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Successful Retrieval</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request</h4>
+                                <div class="code-block">Path: /api/v1/accounts/valid-id-123</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-green-700">Success Response (200 OK)</h4>
+                                <div class="code-block border-green-200 bg-green-50">{<br>&nbsp;&nbsp;"id": "valid-id-123",<br>&nbsp;&nbsp;"email": "user@example.com",<br>&nbsp;&nbsp;"createdAt": "2025-08-31T17:33:00Z"<br>}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Account Not Found</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request</h4>
+                                <div class="code-block">Path: /api/v1/accounts/non-existent-id</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-red-700">Error Response (404 Not Found)</h4>
+                                <div class="code-block border-red-200 bg-red-50">{<br>&nbsp;&nbsp;"error": "Account not found."<br>}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="update">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Update an Account</h2>
+            <p class="text-gray-600 mb-8">Use this endpoint to modify details of an existing account. The request body should contain only the fields that need to be updated.</p>
+            <div class="flex items-center space-x-4 mb-8 p-4 bg-gray-100 rounded-lg">
+                <span class="http-method http-put">PUT</span>
+                <span class="text-gray-700 font-mono text-lg">/api/v1/accounts/{id}</span>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Successful Update</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request Body</h4>
+                                <div class="code-block">{<br>&nbsp;&nbsp;"email": "new.email@example.com"<br>}</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-green-700">Success Response (200 OK)</h4>
+                                <div class="code-block border-green-200 bg-green-50">{<br>&nbsp;&nbsp;"id": "valid-id-123",<br>&nbsp;&nbsp;"email": "new.email@example.com"<br>}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Invalid Input</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request Body</h4>
+                                <div class="code-block">{<br>&nbsp;&nbsp;"email": "not-an-email"<br>}</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-red-700">Error Response (400 Bad Request)</h4>
+                                <div class="code-block border-red-200 bg-red-50">{<br>&nbsp;&nbsp;"error": "Invalid email format."<br>}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="delete">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Delete an Account</h2>
+            <p class="text-gray-600 mb-8">This operation permanently deletes an account. This action is irreversible. A successful deletion returns no content.</p>
+            <div class="flex items-center space-x-4 mb-8 p-4 bg-gray-100 rounded-lg">
+                <span class="http-method http-delete">DELETE</span>
+                <span class="text-gray-700 font-mono text-lg">/api/v1/accounts/{id}</span>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Successful Deletion</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request</h4>
+                                <div class="code-block">Path: /api/v1/accounts/valid-id-123</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-green-700">Success Response (204 No Content)</h4>
+                                <div class="code-block border-green-200 bg-green-50">(Empty Response Body)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Account to Delete Not Found</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request</h4>
+                                <div class="code-block">Path: /api/v1/accounts/non-existent-id</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-red-700">Error Response (404 Not Found)</h4>
+                                <div class="code-block border-red-200 bg-red-50">{<br>&nbsp;&nbsp;"error": "Account not found."<br>}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="auth">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">User Authentication</h2>
+            <p class="text-gray-600 mb-8">Handles user login by validating credentials and returning an authentication token for subsequent authenticated requests.</p>
+            <div class="flex items-center space-x-4 mb-8 p-4 bg-gray-100 rounded-lg">
+                <span class="http-method http-post">POST</span>
+                <span class="text-gray-700 font-mono text-lg">/api/v1/auth/login</span>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Successful Login</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request Body</h4>
+                                <div class="code-block">{<br>&nbsp;&nbsp;"email": "user@example.com",<br>&nbsp;&nbsp;"password": "securepassword123"<br>}</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-green-700">Success Response (200 OK)</h4>
+                                <div class="code-block border-green-200 bg-green-50">{<br>&nbsp;&nbsp;"token": "jwt-auth-token-string"<br>}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg" data-toggle>
+                        <h3 class="text-lg font-semibold text-gray-700">Scenario: Invalid Credentials</h3>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="scenario-content px-5 pb-5">
+                        <div class="grid md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Request Body</h4>
+                                <div class="code-block">{<br>&nbsp;&nbsp;"email": "user@example.com",<br>&nbsp;&nbsp;"password": "wrongpassword"<br>}</div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-red-700">Error Response (401 Unauthorized)</h4>
+                                <div class="code-block border-red-200 bg-red-50">{<br>&nbsp;&nbsp;"error": "Invalid credentials."<br>}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggles = document.querySelectorAll('[data-toggle]');
+        toggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('svg');
+
+                content.classList.toggle('open');
+
+                if (content.classList.contains('open')) {
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            });
+        });
+
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.4
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href').substring(1) === entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    });
+</script>
+</body>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>

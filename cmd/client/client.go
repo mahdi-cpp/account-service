@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mahdi-cpp/account-service/account"
+	"github.com/mahdi-cpp/account-service/internal/account"
 	"github.com/redis/go-redis/v9"
 )
 

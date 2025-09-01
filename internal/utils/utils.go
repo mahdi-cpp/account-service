@@ -1,10 +1,20 @@
-package account
+package utils
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
+
+func ToStringJson[T any](data T) (string, error) {
+	jsonBytes, err := json.Marshal(data)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal struct to JSON: %w", err)
+	}
+	return string(jsonBytes), nil
+}
 
 // GetUserId retrieves the userID from the request header.
 // It returns the userID string and an error if the header is missing.

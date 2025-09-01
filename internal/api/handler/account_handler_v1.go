@@ -1,17 +1,19 @@
-package account
+package handler
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/mahdi-cpp/account-service/internal/account"
+	"github.com/mahdi-cpp/account-service/internal/user"
 )
 
-type UserHandler struct {
-	manager *ServiceManager
+type AccountHandler struct {
+	manager *account.Manager
 }
 
-func NewUserHandler(manager *ServiceManager) *UserHandler {
-	return &UserHandler{
+func NewAccountHandler(manager *account.Manager) *AccountHandler {
+	return &AccountHandler{
 		manager: manager,
 	}
 }
@@ -20,17 +22,9 @@ type requestBody struct {
 	UserID string `json:"userID"`
 }
 
-func (handler *UserHandler) Create(c *gin.Context) {
+func (handler *AccountHandler) Create(c *gin.Context) {
 
-	userID, err := GetUserId(c)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	fmt.Println(userID)
-
-	var request Update
+	var request user.Update
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
@@ -41,7 +35,7 @@ func (handler *UserHandler) Create(c *gin.Context) {
 	//	c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	//}
 
-	newItem, err := handler.manager.Create(&User{
+	newItem, err := handler.manager.Create(&user.User{
 		Username:    request.Username,
 		FirstName:   request.FirstName,
 		LastName:    request.LastName,
@@ -65,7 +59,7 @@ func (handler *UserHandler) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, newItem)
 }
 
-func (handler *UserHandler) Update(c *gin.Context) {
+func (handler *AccountHandler) Update(c *gin.Context) {
 
 	//userID, err := utils.GetUserId(c)
 	//if err != nil {
@@ -73,7 +67,7 @@ func (handler *UserHandler) Update(c *gin.Context) {
 	//	return
 	//}
 
-	var itemUpdate Update
+	var itemUpdate user.Update
 
 	if err := c.ShouldBindJSON(&itemUpdate); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
@@ -89,30 +83,7 @@ func (handler *UserHandler) Update(c *gin.Context) {
 	c.JSON(http.StatusCreated, update)
 }
 
-func (handler *UserHandler) Delete(c *gin.Context) {
-
-	userID, err := GetUserId(c)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	//var item account.User
-	//if err := c.ShouldBindJSON(&item); err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-	//	return
-	//}
-
-	err = handler.manager.UserCollection.Delete(userID)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-		return
-	}
-
-	c.JSON(http.StatusCreated, "delete ok")
-}
-
-func (handler *UserHandler) GetCollectionList(c *gin.Context) {
+func (handler *AccountHandler) GetCollectionList(c *gin.Context) {
 
 	item2, err := handler.manager.UserCollection.GetAll()
 	if err != nil {
@@ -123,15 +94,7 @@ func (handler *UserHandler) GetCollectionList(c *gin.Context) {
 	c.JSON(http.StatusCreated, item2)
 }
 
-func (handler *UserHandler) GetUserByID(c *gin.Context) {
-
-	userID, err := GetUserId(c)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	fmt.Println(userID)
+func (handler *AccountHandler) GetUserByID(c *gin.Context) {
 
 	var request requestBody
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -159,7 +122,7 @@ func (handler *UserHandler) GetUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-func (handler *UserHandler) GetUser(c *gin.Context) {
+func (handler *AccountHandler) GetUser(c *gin.Context) {
 
 	item, err := handler.manager.UserCollection.Get("0198adfd-c0ca-7151-990f-b50956fc7f27")
 	if err != nil {
@@ -170,7 +133,7 @@ func (handler *UserHandler) GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, item)
 }
 
-func (handler *UserHandler) GetList(c *gin.Context) {
+func (handler *AccountHandler) GetList(c *gin.Context) {
 
 	//var with asset.PHFetchOptions
 	//if err := c.ShouldBindJSON(&with); err != nil {
@@ -209,4 +172,15 @@ func (handler *UserHandler) GetList(c *gin.Context) {
 	//}
 
 	c.JSON(http.StatusOK, items)
+}
+
+func (handler *AccountHandler) Delete(c *gin.Context) {
+
+	//err = handler.manager.UserCollection.Delete(userID)
+	//if err != nil {
+	//	c.JSON(http.StatusBadRequest, gin.H{"error": err})
+	//	return
+	//}
+	//
+	//c.JSON(http.StatusCreated, "delete ok")
 }

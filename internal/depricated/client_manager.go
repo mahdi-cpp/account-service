@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mahdi-cpp/account-service/account"
+	"github.com/mahdi-cpp/account-service/internal/user"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -17,7 +17,7 @@ var ctx = context.Background()
 type ClientManager struct {
 	mu       sync.RWMutex
 	rdb      *redis.Client
-	Users    []*account.User
+	Users    []*user.User
 	callback func(msg *redis.Message)
 }
 
