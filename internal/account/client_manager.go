@@ -29,7 +29,7 @@ func NewClientManager() (*ClientManager, error) {
 
 	manager := &ClientManager{
 		rdb: redis.NewClient(&redis.Options{
-			Addr: "localhost:6389",
+			Addr: "localhost:50001",
 			DB:   0,
 		}),
 		UsersMap: make(map[string]*user.User),
@@ -54,8 +54,14 @@ func (m *ClientManager) GetUsersMap() map[string]*user.User {
 }
 
 func (m *ClientManager) runMainSubscription() {
+
 	pubsub := m.rdb.Subscribe(m.ctx, listChannel)
-	defer pubsub.Close()
+	defer func(pubsub *redis.PubSub) {
+		err := pubsub.Close()
+		if err != nil {
+
+		}
+	}(pubsub)
 
 	// Wait for subscription confirmation
 	if _, err := pubsub.Receive(m.ctx); err != nil {
@@ -122,8 +128,13 @@ func (m *ClientManager) StartSubscriber(channels ...string) {
 }
 
 func (m *ClientManager) runSubscription(channels []string) {
+
 	pubsub := m.rdb.Subscribe(m.ctx, channels...)
-	defer pubsub.Close()
+	defer func(pubsub *redis.PubSub) {
+		err := pubsub.Close()
+		if err != nil {
+		}
+	}(pubsub)
 
 	// Wait for subscription confirmation
 	if _, err := pubsub.Receive(m.ctx); err != nil {

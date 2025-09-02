@@ -3,7 +3,7 @@ package user
 import (
 	"strings"
 
-	"github.com/mahdi-cpp/api-go-pkg/search"
+	"github.com/mahdi-cpp/iris-tools/search"
 )
 
 var PHAssetLessFuncs = map[string]search.LessFunction[*User]{

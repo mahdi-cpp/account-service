@@ -1,4 +1,4 @@
-package main
+package gin
 
 import (
 	"context"
@@ -13,15 +13,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var router *gin.Engine
+var Router *gin.Engine
 var port = 50002
 
-func ginInit() {
+func Init() {
 	//gin.SetMode(gin.ReleaseMode)
-	router = gin.Default() // Initialize the Gin engine with default middleware
+	Router = gin.Default() // Initialize the Gin engine with default middleware
 }
 
-func startServer(router *gin.Engine) {
+func StartServer(router *gin.Engine) {
 
 	// Handler HTTP server
 	srv := &http.Server{

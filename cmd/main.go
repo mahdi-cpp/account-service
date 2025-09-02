@@ -4,14 +4,15 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mahdi-cpp/account-service/cmd/middleware"
 	"github.com/mahdi-cpp/account-service/internal/account"
 	"github.com/mahdi-cpp/account-service/internal/api/handler"
+	"github.com/mahdi-cpp/account-service/internal/gin"
+	"github.com/mahdi-cpp/account-service/internal/middleware"
 )
 
 func main() {
 
-	ginInit()
+	gin.Init()
 
 	// Create account manager
 	manager, err := account.NewAccountManager()
@@ -44,13 +45,13 @@ func main() {
 	h := handler.NewAccountHandler(manager)
 	userRoute(h)
 
-	startServer(router)
+	gin.StartServer(gin.Router)
 
 }
 
 func userRoute(h *handler.AccountHandler) {
 
-	api := router.Group("/api/v1/user")
+	api := gin.Router.Group("/api/v1/user")
 	api.Use(middleware.AuthMiddleware())
 
 	api.POST("create", h.Create)

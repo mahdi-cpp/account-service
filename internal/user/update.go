@@ -1,6 +1,6 @@
 package user
 
-import "github.com/mahdi-cpp/api-go-pkg/update"
+import "github.com/mahdi-cpp/iris-tools/update"
 
 // Initialize updater
 var chatUpdater = update.NewUpdater[User, Update]()

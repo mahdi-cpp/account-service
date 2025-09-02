@@ -6,10 +6,8 @@ import (
 
 	"github.com/mahdi-cpp/account-service/internal/depricated"
 	"github.com/mahdi-cpp/account-service/internal/user"
-	"github.com/mahdi-cpp/api-go-pkg/collection_manager_uuid7"
-	"github.com/mahdi-cpp/api-go-pkg/metadata"
-	"github.com/mahdi-cpp/api-go-pkg/network"
-	"github.com/mahdi-cpp/api-go-pkg/shared_model"
+	"github.com/mahdi-cpp/iris-tools/collection_manager_uuid7"
+	"github.com/mahdi-cpp/iris-tools/metadata"
 )
 
 func testAccount(id int) {

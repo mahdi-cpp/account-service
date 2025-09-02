@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/mahdi-cpp/account-service/internal/user"
-	"github.com/mahdi-cpp/api-go-pkg/network"
+	"github.com/mahdi-cpp/iris-tools/network"
 )
 
 type NetworkManager struct {
