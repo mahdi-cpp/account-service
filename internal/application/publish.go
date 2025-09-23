@@ -1,4 +1,4 @@
-package account
+package application
 
 //func publish() {
 //
@@ -56,13 +56,13 @@ package account
 //
 //	for _, user := range Users {
 //
-//		str, err2 := utils.ToStringJson(user)
+//		str, err2 := help.ToStringJson(user)
 //		if err2 != nil {
 //			continue
 //		}
 //
 //		ctx2, cancel := context.WithTimeout(context.Background(), 2*time.Second) // Add a timeout for publish
-//		_, err = rdb.Publish(ctx2, "account/user", str).Result()
+//		_, err = rdb.Publish(ctx2, "application/user", str).Result()
 //		cancel() // Release resources associated with the context
 //
 //		if err != nil {
@@ -79,13 +79,13 @@ package account
 //		return
 //	}
 //
-//	toJSON, err := utils.ToStringJson(Users)
+//	toJSON, err := help.ToStringJson(Users)
 //	if err != nil {
 //		return
 //	}
 //
 //	ctx2, cancel := context.WithTimeout(context.Background(), 2*time.Second) // Add a timeout for publish
-//	_, err = rdb.Publish(ctx2, "account/list", toJSON).Result()
+//	_, err = rdb.Publish(ctx2, "application/list", toJSON).Result()
 //	cancel() // Release resources associated with the context
 //
 //	if err != nil {

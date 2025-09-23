@@ -1,4 +1,4 @@
-package account
+package application
 
 //func (manager *ClientManager) InitRespService() {
 //
@@ -18,7 +18,7 @@ package account
 //	// --- Subscriber Goroutine ---
 //	go func() {
 //
-//		pubsub := rdb.Subscribe(ctx, "account/user", "account/list", "account/search")
+//		pubsub := rdb.Subscribe(ctx, "application/user", "application/list", "application/search")
 //		defer pubsub.Close()
 //
 //		Subscriber(pubsub)

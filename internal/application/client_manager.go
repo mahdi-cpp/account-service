@@ -1,4 +1,4 @@
-package account
+package application
 
 import (
 	"context"
@@ -8,7 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mahdi-cpp/account-service/internal/user"
+	"github.com/google/uuid"
+	"github.com/mahdi-cpp/account-service/internal/collections/user"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -16,7 +17,7 @@ type ClientManager struct {
 	mu        sync.RWMutex
 	rdb       *redis.Client
 	Users     []*user.User
-	UsersMap  map[string]*user.User
+	UsersMap  map[uuid.UUID]*user.User
 	callback  func(msg *redis.Message)
 	ctx       context.Context
 	cancel    context.CancelFunc
@@ -32,7 +33,7 @@ func NewClientManager() (*ClientManager, error) {
 			Addr: "localhost:50001",
 			DB:   0,
 		}),
-		UsersMap: make(map[string]*user.User),
+		UsersMap: make(map[uuid.UUID]*user.User),
 		ctx:      ctx,
 		cancel:   cancel,
 		subReady: make(chan struct{}),
@@ -49,7 +50,7 @@ func NewClientManager() (*ClientManager, error) {
 	return manager, nil
 }
 
-func (m *ClientManager) GetUsersMap() map[string]*user.User {
+func (m *ClientManager) GetUsersMap() map[uuid.UUID]*user.User {
 	return m.UsersMap
 }
 

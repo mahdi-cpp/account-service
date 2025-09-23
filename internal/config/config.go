@@ -1,12 +1,3 @@
 package config
 
-import (
-	"path/filepath"
-)
-
-const rootDir = "/app/iris/"
-const serviceDir = "services"
-
-func GetServicesPath(file string) string {
-	return filepath.Join(rootDir, serviceDir, file)
-}
+const RootDir = "/app/iris/services/accounts"

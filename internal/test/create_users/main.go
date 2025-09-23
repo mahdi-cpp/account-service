@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/mahdi-cpp/account-service/internal/user"
+	"github.com/mahdi-cpp/account-service/internal/collections/user"
 )
 
 // ProcessUserJSONFile reads a JSON file containing an array of User structs,

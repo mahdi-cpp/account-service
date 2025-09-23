@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/redis/go-redis/v9"
 	"log"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 var ctx = context.Background()
@@ -27,7 +28,7 @@ func main() {
 
 	ctx2, cancel := context.WithTimeout(context.Background(), 2*time.Second) // Add a timeout for publish
 	//_, err = rdb.Publish(ctx2, "channel_2", "send by client2").Result()
-	_, err = rdb.Publish(ctx2, "account/command", "list").Result()
+	_, err = rdb.Publish(ctx2, "application/command", "list").Result()
 	cancel() // Release resources associated with the context
 
 	if err != nil {

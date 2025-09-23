@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mahdi-cpp/account-service/internal/user"
+	"github.com/mahdi-cpp/account-service/internal/collections/user"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -44,16 +44,16 @@ func NewClientManager() *ClientManager {
 	go func() {
 
 		pubsub := manager.rdb.Subscribe(ctx,
-			"account/list",
+			"application/list",
 		)
 		defer pubsub.Close()
 
 		ch := pubsub.Channel()
 		for msg := range ch {
 			fmt.Println("Subscribe")
-			if msg.Channel == "account/user" {
+			if msg.Channel == "application/user" {
 				//manager.userChanel(msg.Payload)
-			} else if msg.Channel == "account/list" {
+			} else if msg.Channel == "application/list" {
 				manager.fetchUsers(msg)
 			}
 		}
@@ -68,7 +68,7 @@ func (manager *ClientManager) RequestList() error {
 	time.Sleep(20 * time.Millisecond)
 
 	ctx2, cancel := context.WithTimeout(context.Background(), 2*time.Second) // Add a timeout for publish
-	_, err := manager.rdb.Publish(ctx2, "account/command", "list").Result()
+	_, err := manager.rdb.Publish(ctx2, "application/command", "list").Result()
 	cancel() // Release resources associated with the context
 
 	if err != nil {

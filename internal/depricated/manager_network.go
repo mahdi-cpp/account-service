@@ -3,7 +3,7 @@ package depricated
 import (
 	"log"
 
-	"github.com/mahdi-cpp/account-service/internal/user"
+	"github.com/mahdi-cpp/account-service/internal/collections/user"
 	"github.com/mahdi-cpp/iris-tools/network"
 )
 

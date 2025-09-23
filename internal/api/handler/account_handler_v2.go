@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// Account represents the structure of a user account.
+// Account represents the structure of a user application.
 type Account struct {
 	ID        string    `json:"id"`
 	Email     string    `json:"email"`
@@ -39,12 +39,12 @@ type loginRequest struct {
 // Handlers for the API endpoints.
 
 // createAccount godoc
-// @Summary Create a new user account
-// @Description Creates a new account with a unique ID and stores it.
+// @Summary Create a new user application
+// @Description Creates a new application with a unique ID and stores it.
 // @Tags accounts
 // @Accept json
 // @Produce json
-// @Param account body createAccountRequest true "Account data"
+// @Param application body createAccountRequest true "Account data"
 // @Success 201 {object} map[string]string "Successful creation"
 // @Failure 400 {object} map[string]string "Invalid input"
 // @Failure 409 {object} map[string]string "Duplicate email"
@@ -77,8 +77,8 @@ func createAccount(c *gin.Context) {
 }
 
 // getAccount godoc
-// @Summary Get account details by ID
-// @Description Retrieves an account's details using a unique ID.
+// @Summary Get application details by ID
+// @Description Retrieves an application's details using a unique ID.
 // @Tags accounts
 // @Produce json
 // @Param id path string true "Account ID"
@@ -90,7 +90,7 @@ func getAccount(c *gin.Context) {
 	id := c.Param("id")
 
 	if _, err := uuid.Parse(id); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid account ID format."})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid application ID format."})
 		return
 	}
 
@@ -103,13 +103,13 @@ func getAccount(c *gin.Context) {
 }
 
 // updateAccount godoc
-// @Summary Update an account
-// @Description Updates an existing account's details.
+// @Summary Update an application
+// @Description Updates an existing application's details.
 // @Tags accounts
 // @Accept json
 // @Produce json
 // @Param id path string true "Account ID"
-// @Param account body updateAccountRequest true "Account data to update"
+// @Param application body updateAccountRequest true "Account data to update"
 // @Success 200 {object} Account "Successful update"
 // @Failure 400 {object} map[string]string "Invalid input"
 // @Failure 404 {object} map[string]string "Account not found"
@@ -140,8 +140,8 @@ func updateAccount(c *gin.Context) {
 }
 
 // deleteAccount godoc
-// @Summary Delete an account by ID
-// @Description Permanently deletes an account.
+// @Summary Delete an application by ID
+// @Description Permanently deletes an application.
 // @Tags accounts
 // @Produce json
 // @Param id path string true "Account ID"

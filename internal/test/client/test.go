@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/mahdi-cpp/account-service/internal/collections/user"
 	"github.com/mahdi-cpp/account-service/internal/depricated"
-	"github.com/mahdi-cpp/account-service/internal/user"
-	"github.com/mahdi-cpp/iris-tools/collection_manager_uuid7"
+	"github.com/mahdi-cpp/iris-tools/collection_manager_memory"
 	"github.com/mahdi-cpp/iris-tools/metadata"
+	"github.com/mahdi-cpp/iris-tools/network"
+	"github.com/mahdi-cpp/iris-tools/shared_model"
 )
 
 func testAccount(id int) {
@@ -35,7 +37,7 @@ func testAccountUserList() {
 }
 
 func testCollection2() {
-	users, err := collection_manager_uuid7.NewCollectionManager[*user.User]("albums_test.json", false)
+	users, err := collection_manager_memory.New[*user.User]("albums_test.json")
 	if err != nil {
 		fmt.Println("UserStorage:", err)
 		return

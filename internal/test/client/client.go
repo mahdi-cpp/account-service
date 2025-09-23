@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mahdi-cpp/account-service/internal/account"
+	"github.com/mahdi-cpp/account-service/internal/application"
 	"github.com/redis/go-redis/v9"
 )
 
 func main() {
 
 	// Create manager
-	manager, err := account.NewClientManager()
+	manager, err := application.NewClientManager()
 
 	if err != nil {
 		log.Fatal(err)
@@ -40,7 +40,7 @@ func main() {
 	}
 
 	// Start additional subscribers
-	manager.StartSubscriber("account/notifications", "account/alerts")
+	manager.StartSubscriber("application/notifications", "application/alerts")
 
 	fmt.Println("12")
 
