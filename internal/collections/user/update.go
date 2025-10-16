@@ -12,15 +12,16 @@ type UpdateOptions struct {
 	// Core Identity & Basic Information
 	ID uuid.UUID `json:"id"` // Unique identifier for the user
 
-	Username    *string `json:"username"`    // User's login username (must be unique)
-	DisplayName *string `json:"displayName"` // Name displayed publicly (can differ from Username)
-	PhoneNumber *string `json:"phoneNumber"` // User's phone number
-	Email       *string `json:"email"`       // User's email address
-	FirstName   *string `json:"firstName"`   // User's first name
-	LastName    *string `json:"lastName"`    // User's last name
-	Bio         *string `json:"bio"`         // Short biography or "About Me" section
-	AvatarURL   *string `json:"avatarURL"`   // URL to the user's profile picture
-	IsVerified  *bool   `json:"isVerified"`  // Indicates if the application is verified (e.g., for official accounts)
+	Username     *string `json:"username"`    // User's login username (must be unique)
+	DisplayName  *string `json:"displayName"` // Name displayed publicly (can differ from Username)
+	PhoneNumber  *string `json:"phoneNumber"` // User's phone number
+	Email        *string `json:"email"`       // User's email address
+	FirstName    *string `json:"firstName"`   // User's first name
+	LastName     *string `json:"lastName"`    // User's last name
+	Bio          *string `json:"bio"`         // Short biography or "About Me" section
+	OriginalURL  *string `json:"originalUrl"`
+	ThumbnailURL *string `json:"thumbnailUrl"`
+	IsVerified   *bool   `json:"isVerified"` // Indicates if the application is verified (e.g., for official accounts)
 
 	// Presence & Connectivity (for chat, social apps)
 	IsOnline      *bool      `json:"isOnline"`      // Current online status of the user
@@ -82,8 +83,8 @@ func init() {
 		if u.Bio != nil {
 			c.Bio = *u.Bio
 		}
-		if u.AvatarURL != nil {
-			c.AvatarURL = *u.AvatarURL
+		if u.ThumbnailURL != nil {
+			c.ThumbnailURL = *u.ThumbnailURL
 		}
 		if u.IsVerified != nil {
 			c.IsVerified = *u.IsVerified
@@ -131,7 +132,7 @@ func init() {
 
 }
 
-func Update(user *User, update *UpdateOptions) *User {
-	chatUpdater.Apply(user, *update)
+func Update(user *User, update UpdateOptions) *User {
+	chatUpdater.Apply(user, update)
 	return user
 }

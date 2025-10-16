@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/goccy/go-json"
 	"github.com/google/uuid"
 	"github.com/mahdi-cpp/account-service/internal/application"
 	"github.com/mahdi-cpp/account-service/internal/collections/user"
@@ -37,7 +38,7 @@ func (handler *AccountHandler) Create(c *gin.Context) {
 		return
 	}
 
-	newItem, err := handler.appManager.CreateUser(&u)
+	newItem, err := handler.appManager.UserManager.Create(&u)
 	if err != nil {
 		SendError(c, err.Error(), 2)
 		return
@@ -48,12 +49,16 @@ func (handler *AccountHandler) Create(c *gin.Context) {
 
 func (handler *AccountHandler) Read(c *gin.Context) {
 
-	id, err := uuid.Parse("0198adfd-c0ca-7151-990f-b50956fc7f27")
+	fmt.Println("Read...")
+
+	idStr := c.Query("id")
+
+	id, err := uuid.Parse(idStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 	}
 
-	item, err := handler.appManager.ReadUser(id)
+	item, err := handler.appManager.UserManager.Read(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
@@ -64,28 +69,37 @@ func (handler *AccountHandler) Read(c *gin.Context) {
 
 func (handler *AccountHandler) ReadAll(c *gin.Context) {
 
-	with := &user.SearchOptions{}
+	var with *user.SearchOptions
+	err := json.NewDecoder(c.Request.Body).Decode(&with)
+	if err != nil {
+		SendError(c, err.Error(), http.StatusBadRequest)
+		return
+	}
 
-	item2, err := handler.appManager.ReadUsers(with)
+	users, err := handler.appManager.UserManager.ReadAll(with)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
-	c.JSON(http.StatusCreated, item2)
+	for _, u := range users {
+		fmt.Println(u.ThumbnailURL)
+	}
+
+	c.JSON(http.StatusCreated, users)
 }
 
 func (handler *AccountHandler) Update(c *gin.Context) {
 
 	fmt.Println("update")
-	
+
 	var with user.UpdateOptions
 	if err := c.ShouldBindJSON(&with); err != nil {
 		SendError(c, "Invalid with", http.StatusBadRequest)
 		return
 	}
 
-	newItem, err := handler.appManager.UpdateUsers(&with)
+	newItem, err := handler.appManager.UserManager.Update(with)
 	if err != nil {
 		SendError(c, err.Error(), 2)
 		return

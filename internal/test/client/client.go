@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mahdi-cpp/account-service/internal/application"
+	"github.com/mahdi-cpp/account-service/internal/client"
 	"github.com/redis/go-redis/v9"
 )
 
 func main() {
 
 	// Create manager
-	manager, err := application.NewClientManager()
+	manager, err := client.NewClientManager()
 
 	if err != nil {
 		log.Fatal(err)

@@ -1,4 +1,4 @@
-package application
+package client_manager
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/mahdi-cpp/account-service/internal/application"
 	"github.com/mahdi-cpp/account-service/internal/collections/user"
 	"github.com/redis/go-redis/v9"
 )
@@ -56,7 +57,7 @@ func (m *ClientManager) GetUsersMap() map[uuid.UUID]*user.User {
 
 func (m *ClientManager) runMainSubscription() {
 
-	pubsub := m.rdb.Subscribe(m.ctx, listChannel)
+	pubsub := m.rdb.Subscribe(m.ctx, application.ListChannel)
 	defer func(pubsub *redis.PubSub) {
 		err := pubsub.Close()
 		if err != nil {
@@ -118,7 +119,7 @@ func (m *ClientManager) RequestList() error {
 	ctx, cancel := context.WithTimeout(m.ctx, 2*time.Second)
 	defer cancel()
 
-	if err := m.rdb.Publish(ctx, commandChannel, "list").Err(); err != nil {
+	if err := m.rdb.Publish(ctx, application.CommandChannel, "list").Err(); err != nil {
 		return fmt.Errorf("publish failed: %w", err)
 	}
 	return nil
@@ -161,7 +162,7 @@ func (m *ClientManager) runSubscription(channels []string) {
 
 func (m *ClientManager) handleMessage(msg *redis.Message) {
 	switch msg.Channel {
-	case listChannel:
+	case application.ListChannel:
 		m.fetchUsers(msg)
 	default:
 		log.Printf("Received message on %s: %s", msg.Channel, msg.Payload)

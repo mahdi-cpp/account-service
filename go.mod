@@ -8,7 +8,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/go-cmp v0.5.5
 	github.com/google/uuid v1.6.0
-	github.com/mahdi-cpp/iris-tools v1.0.11
+	github.com/mahdi-cpp/iris-tools v1.0.24
 	github.com/redis/go-redis/v9 v9.12.1
 )
 

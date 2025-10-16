@@ -14,16 +14,17 @@ func (u *User) GetRecordSize() int       { return 4000 }
 
 type User struct {
 	// Core Identity & Basic Information
-	ID          uuid.UUID `json:"id"`          // unique: true
-	Username    string    `json:"username"`    // unique: true
-	Email       string    `json:"email"`       // unique: true
-	PhoneNumber string    `json:"phoneNumber"` // unique: true
-	FirstName   string    `json:"firstName"`
-	LastName    string    `json:"lastName"`
-	DisplayName string    `json:"displayName"`
-	Bio         string    `json:"bio"`
-	AvatarURL   string    `json:"avatarUrl"`
-	IsVerified  bool      `json:"isVerified"`
+	ID           uuid.UUID `json:"id"`          // unique: true
+	Username     string    `json:"username"`    // unique: true
+	Email        string    `json:"email"`       // unique: true
+	PhoneNumber  string    `json:"phoneNumber"` // unique: true
+	FirstName    string    `json:"firstName"`
+	LastName     string    `json:"lastName"`
+	DisplayName  string    `json:"displayName"`
+	Bio          string    `json:"bio"`
+	OriginalURL  string    `json:"originalUrl"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	IsVerified   bool      `json:"isVerified"`
 
 	// Presence & Connectivity
 	IsOnline      bool      `json:"isOnline"` // Note: omitempty for bool is complex, depends on default value

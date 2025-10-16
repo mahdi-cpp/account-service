@@ -42,9 +42,9 @@ func userRoute(h *handler.AccountHandler) {
 	//api.Use(middleware.AuthMiddleware())
 
 	api.POST("/api/users", h.Create)
+	api.POST("/api/users/search", h.ReadAll)
 
-	api.GET("/api/users/userId", h.Read)
-	api.GET("/api/users", h.ReadAll)
+	api.GET("/api/users", h.Read)
 
 	api.PATCH("/api/users", h.Update)
 	api.DELETE("/api/users", h.Delete)

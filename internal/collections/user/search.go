@@ -26,7 +26,10 @@ type SearchOptions struct {
 	CreatedAfter  *time.Time `form:"createdAfter,omitempty"`
 	CreatedBefore *time.Time `form:"createdBefore,omitempty"`
 	ActiveAfter   *time.Time `form:"activeAfter,omitempty"`
+	SearchA
+}
 
+type SearchA struct {
 	// Sorting
 	Sort      string `json:"sort,omitempty"`      // "title", "created", "members", "lastActivity"
 	SortOrder string `json:"sortOrder,omitempty"` // "asc" or "desc"
